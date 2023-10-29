@@ -1,4 +1,4 @@
-package org.example;
+package utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -13,4 +13,18 @@ public class ImageTool {
 
         return b;
     }
+
+    public static RGB getRGB(int pixel) {
+        return new RGB(
+                (pixel >> 24) & 0xFF,
+                (pixel >> 16) & 0xFF,
+                (pixel >> 8) & 0xFF,
+                pixel & 0xFF
+        );
+    }
+
+    public static int toPixel(RGB rgb) {
+        return (rgb.alpha() << 24) | (rgb.red() << 16) | (rgb.green() << 8) | rgb.blue();
+    }
+
 }

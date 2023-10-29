@@ -1,17 +1,37 @@
 package core;
 
-public class StenographyProcessor {
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 
-    private final Encrypter encrypter;
-    private final Decrypter decrypter;
+public class SteganographyProcessor {
 
-    public StenographyProcessor(SteganographyType type, String containerPath) {
+    private final SteganographyType type;
+
+    public SteganographyProcessor(SteganographyType type) {
+        this.type = type;
+    }
+
+    public void process(String containerPath, String message, String outputPath) throws IOException {
         switch (type) {
             case IMAGE -> {
-                encrypter = new ImageEncrypter();
-                decrypter = new ImageDecrypter();
+                var newImage = ImageEncrypter.encrypt(
+                        ImageIO.read(new File(containerPath)),
+                        message
+                );
+                ImageIO.write(newImage, outputPath.split("\\.")[1], new File(outputPath));
             }
             default -> throw new IllegalArgumentException();
         }
+    }
+
+    public String extract(String containerPath, int messageLength) throws IOException {
+        return switch (type) {
+            case IMAGE -> ImageDecrypter.decrypt(
+                    ImageIO.read(new File(containerPath)),
+                    messageLength
+            );
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

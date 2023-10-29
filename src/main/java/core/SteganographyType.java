@@ -1,2 +1,5 @@
-package core;public class SteganographyType {
+package core;
+
+public enum SteganographyType {
+    IMAGE
 }
